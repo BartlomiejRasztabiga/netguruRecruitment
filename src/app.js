@@ -4,12 +4,6 @@ import bodyParser from "body-parser"
 import mongoose from "./services/mongoose"
 import routes from "./routes"
 
-mongoose.connect(
-  "mongodb://localhost/netguru",
-  { useNewUrlParser: true }
-)
-mongoose.Promise = Promise
-
 const app = express()
 app.disable("x-powered-by")
 
