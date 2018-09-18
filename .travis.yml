@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+  - node
+script:
+  - npm test -i --coverage
+env:
+  global:
+    - SENDGRID_KEY=sendgridKey
+    - MASTER_KEY=masterKey
+    - JWT_SECRET=jwtSecret

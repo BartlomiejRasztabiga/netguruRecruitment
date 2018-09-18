@@ -1,0 +1,43 @@
+import express from "express"
+import logger from "morgan"
+import bodyParser from "body-parser"
+import mongoose from "./services/mongoose"
+import routes from "./routes"
+
+mongoose.connect(
+  "mongodb://localhost/netguru",
+  { useNewUrlParser: true }
+)
+mongoose.Promise = Promise
+
+const app = express()
+app.disable("x-powered-by")
+
+app.use(
+  logger("dev", {
+    skip: () => app.get("env") === "test"
+  })
+)
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// Routes
+app.use("/", routes)
+
+// Catch 404 and forward to error handler
+app.use((req, res, next) => {
+  const err = new Error("Not Found")
+  err.status = 404
+  next(err)
+})
+
+// Error handler
+app.use((err, req, res, next) => {
+  res.status(err.status).send("Something broke: ", {
+    message: err.message
+  })
+})
+
+app.listen(8080, () => console.log("App listening on port 8080"))
+
+export default app
