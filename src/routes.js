@@ -1,4 +1,5 @@
 import { Router } from "express"
+import Movie from "./api/movie"
 import axios from "axios"
 
 const routes = Router()
@@ -23,7 +24,12 @@ routes.post("/movies", async (req, res, next) => {
   let movieDetails = response.data
   console.log(movieDetails)
 
-  res.sendStatus(201)
+  let newMovie = new Movie(movieDetails)
+  console.log(newMovie)
+
+  newMovie.save(movie => {
+    res.sendStatus(201)
+  })
 })
 
 /**

@@ -3,7 +3,7 @@ import mongooseKeywords from "mongoose-keywords"
 
 const movieSchema = new mongoose.Schema(
   {
-    title: {
+    Title: {
       type: String,
       required: true,
       trim: true
