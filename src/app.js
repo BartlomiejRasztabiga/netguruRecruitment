@@ -9,6 +9,8 @@ const mongoConnectionString = process.env.MONGO_URI
   ? process.env.MONGO_URI
   : "mongodb://localhost/netguru" // connect to specified mongo instance, otherwise use local
 
+const appPort = process.env.PORT || 8080 // 8080 by default, if not otherwise specified
+
 mongoose.connect(
   mongoConnectionString,
   { useNewUrlParser: true }
@@ -42,7 +44,7 @@ app.use((err, req, res, next) => {
   })
 })
 
-// Listen on port 8080
-app.listen(8080, () => console.log("App listening on port 8080"))
+// Listen on port (by default) 8080
+app.listen(appPort, () => console.log("App listening on port " + appPort))
 
 export default app
