@@ -16,7 +16,7 @@ mongoose.connect(
 mongoose.Promise = Promise
 
 const app = express()
-//app.disable("x-powered-by")
+app.disable("x-powered-by") // security purposes
 
 // Enable Morgan Logger
 app.use(logger("dev"))
