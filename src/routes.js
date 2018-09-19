@@ -9,26 +9,27 @@ const OMDB_API_URL = "http://www.omdbapi.com/?apikey=28f23e99"
  * POST /movies
  */
 routes.post("/movies", async (req, res, next) => {
-  console.log("new movie")
   console.log(req.body)
 
   const newMovieTitle = req.body.title
 
   if (!newMovieTitle) {
-    res.sendStatus(400).send("Field 'title' is required")
-    next()
+    res.status(400).json({ errorMessage: "Field 'title' is required" })
+    return
   }
 
   let response = await axios.get(OMDB_API_URL + "&t=" + newMovieTitle)
   let movieDetails = response.data
 
   let newMovie = new Movie(movieDetails)
-  console.log(newMovie)
 
   newMovie.save(err => {
-    if (err) console.log(err)
-    console.log("saved")
-    res.sendStatus(201).json(movieDetails)
+    if (err) {
+      console.error(err)
+      res.status(500).json(err)
+    } else {
+      res.status(201).json(movieDetails)
+    }
   })
 })
 

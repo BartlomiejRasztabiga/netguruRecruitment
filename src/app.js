@@ -2,6 +2,18 @@ import express from "express"
 import logger from "morgan"
 import bodyParser from "body-parser"
 import routes from "./routes"
+import mongoose from "./services/mongoose"
+
+// Connect to MongoDB instance
+const mongoConnectionString = process.env.MONGO_URI
+  ? process.env.MONGO_URI
+  : "mongodb://localhost/netguru" // connect to specified mongo instance, otherwise use local
+
+mongoose.connect(
+  mongoConnectionString,
+  { useNewUrlParser: true }
+)
+mongoose.Promise = Promise
 
 const app = express()
 //app.disable("x-powered-by")
