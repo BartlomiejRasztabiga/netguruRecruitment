@@ -21,5 +21,5 @@ export const retrieveMovieDetails = async movieTitle => {
 export const isMovieExisting = async movieID => {
   let movies = await Movie.find({ _id: movieID })
 
-  return movies.length ? true : false
+  return !!movies.length
 }
