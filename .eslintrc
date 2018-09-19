@@ -1,0 +1,12 @@
+{
+  "parser": "babel-eslint",
+  "extends": ["standard"],
+  "env": {
+    "jest": true,
+    "jasmine": true
+  },
+  "rules": {
+    "quotes": [2, "double", { "avoidEscape": true }],
+    "space-before-function-paren": "off"
+  }
+}
