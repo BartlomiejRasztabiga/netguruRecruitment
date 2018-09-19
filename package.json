@@ -18,7 +18,8 @@
     "precommit": "pretty-quick --staged"
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "setupTestFrameworkScriptFile": "<rootDir>/test/setup.js"
   },
   "dependencies": {
     "@babel/core": "^7.0.0",
