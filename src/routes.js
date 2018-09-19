@@ -1,34 +1,27 @@
 import { Router } from "express"
-import Movie from "./api/movie"
-import axios from "axios"
+import { addMovie, retrieveMovieDetails } from "./services/movieService"
 
 const routes = Router()
-const OMDB_API_URL = "http://www.omdbapi.com/?apikey=28f23e99"
 
 /**
  * POST /movies
  */
 routes.post("/movies", async (req, res, next) => {
-  console.log(req.body)
+  const movieTitle = req.body.title
 
-  const newMovieTitle = req.body.title
-
-  if (!newMovieTitle) {
+  if (!movieTitle) {
     res.status(400).json({ errorMessage: "Field 'title' is required" })
     return
   }
 
-  let response = await axios.get(OMDB_API_URL + "&t=" + newMovieTitle)
-  let movieDetails = response.data
+  let movieDetails = await retrieveMovieDetails(movieTitle)
 
-  let newMovie = new Movie(movieDetails)
-
-  newMovie.save(err => {
+  addMovie(movieDetails).then((movie, err) => {
     if (err) {
       console.error(err)
       res.status(500).json(err)
     } else {
-      res.status(201).json(movieDetails)
+      res.status(201).json(movie)
     }
   })
 })
