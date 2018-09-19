@@ -1,16 +1,12 @@
 import Promise from "bluebird"
 import mongoose from "mongoose"
-// import MongodbMemoryServer from "mongodb-memory-server"
 
-// const mongod = new MongodbMemoryServer()
-
-// const uri = await mongod.getConnectionString()
-// const port = await mongod.getPort()
-// const dbPath = await mongod.getDbPath()
-// const dbName = await mongod.getDbName()
+const mongoConnectionString = process.env.MONGO_URI
+  ? process.env.MONGO_URI
+  : "mongodb://localhost/netguru" // connect to specified mongo instance, otherwise use local
 
 mongoose.connect(
-  "mongodb://localhost/netguru",
+  mongoConnectionString,
   { useNewUrlParser: true }
 )
 
@@ -18,9 +14,9 @@ mongoose.set("useCreateIndex", true)
 
 mongoose.Promise = Promise
 
-mongoose.Types.ObjectId.prototype.view = function() {
-  return { id: this.toString() }
-}
+// mongoose.Types.ObjectId.prototype.view = function() {
+//   return { id: this.toString() }
+// }
 
 mongoose.connection.on("error", err => {
   console.error("MongoDB connection error: " + err)

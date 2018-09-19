@@ -3,6 +3,7 @@ import Movie from "./api/movie"
 import axios from "axios"
 
 const routes = Router()
+const OMDB_API_URL = "http://www.omdbapi.com/?apikey=28f23e99"
 
 /**
  * POST /movies
@@ -18,17 +19,16 @@ routes.post("/movies", async (req, res, next) => {
     next()
   }
 
-  let response = await axios.get(
-    "http://www.omdbapi.com/?apikey=28f23e99&t=" + newMovieTitle
-  )
+  let response = await axios.get(OMDB_API_URL + "&t=" + newMovieTitle)
   let movieDetails = response.data
-  console.log(movieDetails)
 
   let newMovie = new Movie(movieDetails)
   console.log(newMovie)
 
-  newMovie.save(movie => {
-    res.sendStatus(201)
+  newMovie.save(err => {
+    if (err) console.log(err)
+    console.log("saved")
+    res.sendStatus(201).json(movieDetails)
   })
 })
 
