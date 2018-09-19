@@ -5,6 +5,7 @@ mongoose.set("useCreateIndex", true)
 
 mongoose.Promise = Promise
 
+// Convert ObjectIDs to String so we can identify movies by ID
 mongoose.Types.ObjectId.prototype.view = function() {
   return { id: this.toString() }
 }

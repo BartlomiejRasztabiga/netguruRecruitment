@@ -1,12 +1,18 @@
 import { Router } from "express"
-import { addMovie, retrieveMovieDetails } from "./services/movieService"
+import {
+  addMovie,
+  retrieveMovieDetails,
+  getMovies,
+  isMovieExisting
+} from "./services/movieService"
+import { addComment, getComments } from "./services/commentService"
 
 const routes = Router()
 
 /**
  * POST /movies
  */
-routes.post("/movies", async (req, res, next) => {
+routes.post("/movies", async (req, res) => {
   const movieTitle = req.body.title
 
   if (!movieTitle) {
@@ -29,34 +35,54 @@ routes.post("/movies", async (req, res, next) => {
 /**
  * GET /movies
  */
-routes.get("/movies", (req, res, next) => {
-  console.log("get movies")
+routes.get("/movies", async (req, res) => {
+  let movies = await getMovies()
 
-  res.send(200)
+  // TODO: add filtering
+
+  res.status(200).json(movies)
 })
 
 /**
- * GET /list
- *
- * This is a sample route demonstrating
- * a simple approach to error handling and testing
- * the global error handler. You most certainly want to
- * create different/better error handlers depending on
- * your use case.
+ * POST /comments
  */
-routes.get("/list", (req, res, next) => {
-  const { title } = req.query
+routes.post("/comments", async (req, res) => {
+  const movieID = req.body.movieID
+  const commentMessage = req.body.commentMessage
 
-  if (title == null || title === "") {
-    // You probably want to set the response HTTP status to 400 Bad Request
-    // or 422 Unprocessable Entity instead of the default 500 of
-    // the global error handler (e.g check out https://github.com/kbariotis/throw.js).
-    // This is just for demo purposes.
-    next(new Error('The "title" parameter is required'))
+  if (!movieID) {
+    res.status(400).json({ errorMessage: "Field 'movieID' is required" })
     return
   }
 
-  res.render("index", { title })
+  if (!commentMessage) {
+    res.status(400).json({ errorMessage: "Field 'commentMessage' is required" })
+    return
+  }
+
+  if (!(await isMovieExisting(movieID))) {
+    res.status(400).json({ errorMessage: "Movie with given ID does not exist" })
+    return
+  }
+
+  addComment(movieID, commentMessage).then((comment, err) => {
+    if (err) {
+      console.error(err)
+      res.status(500).json(err)
+    } else {
+      res.status(201).json(comment)
+    }
+  })
+})
+
+/**
+ * GET /comments
+ */
+routes.get("/comments", async (req, res, next) => {
+  const movieID = req.query.movieID
+  let comments = await getComments(movieID)
+
+  res.status(200).json(comments)
 })
 
 export default routes

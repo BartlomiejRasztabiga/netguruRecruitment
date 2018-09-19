@@ -3,7 +3,7 @@ import Movie from "../../api/movie"
 
 const OMDB_API_URL = "http://www.omdbapi.com/?apikey=28f23e99"
 
-export const getMovies = () => Movie.find({})
+export const getMovies = async () => Movie.find({})
 
 export const addMovie = async movieDetails => {
   let newMovie = new Movie(movieDetails)
@@ -16,4 +16,10 @@ export const retrieveMovieDetails = async movieTitle => {
   let movieDetails = response.data
 
   return movieDetails
+}
+
+export const isMovieExisting = async movieID => {
+  let movies = await Movie.find({ _id: movieID })
+
+  return movies.length ? true : false
 }
