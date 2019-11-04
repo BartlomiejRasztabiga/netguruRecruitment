@@ -22,14 +22,18 @@ routes.post("/movies", async (req, res) => {
 
   let movieDetails = await retrieveMovieDetails(movieTitle)
 
-  addMovie(movieDetails).then((movie, err) => {
-    if (err) {
-      console.error(err)
-      res.status(500).json(err)
-    } else {
-      res.status(201).json(movie)
-    }
-  })
+  if (movieDetails) {
+    addMovie(movieDetails).then((movie, err) => {
+      if (err) {
+        console.error(err)
+        res.status(500).json(err)
+      } else {
+        res.status(201).json(movie)
+      }
+    })
+  } else {
+    res.status(404).json({ message: "Movie with given title does not exist" })
+  }
 })
 
 /**

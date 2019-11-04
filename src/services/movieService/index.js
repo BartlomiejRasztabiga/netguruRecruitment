@@ -13,7 +13,7 @@ export const addMovie = async movieDetails => {
 
 export const retrieveMovieDetails = async movieTitle => {
   let response = await axios.get(OMDB_API_URL + "&t=" + movieTitle)
-  let movieDetails = response.data
+  let movieDetails = response.data.Response === "True" ? response.data : null
 
   return movieDetails
 }
