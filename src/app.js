@@ -11,10 +11,10 @@ const mongoConnectionString = process.env.MONGO_URI
 
 const appPort = process.env.PORT || 8080 // 8080 by default, if not otherwise specified
 
-mongoose.connect(
-  mongoConnectionString,
-  { useNewUrlParser: true }
-)
+mongoose.connect(mongoConnectionString, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
 mongoose.Promise = Promise
 
 const app = express()
