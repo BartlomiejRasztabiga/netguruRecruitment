@@ -7,7 +7,7 @@ import mongoose from "./services/mongoose"
 // Connect to MongoDB instance
 const mongoConnectionString = process.env.MONGO_URI
   ? process.env.MONGO_URI
-  : "mongodb://localhost/netguru" // connect to specified mongo instance, otherwise use local
+  : "mongodb://localhost:27017/netguru" // connect to specified mongo instance, otherwise use local
 
 const appPort = process.env.PORT || 8080 // 8080 by default, if not otherwise specified
 
