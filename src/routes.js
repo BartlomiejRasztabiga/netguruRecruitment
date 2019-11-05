@@ -5,7 +5,8 @@ import {
   getMovies,
   isMovieExisting
 } from "./services/movieService"
-import { addComment, getComments } from "./services/commentService"
+import { addComment, getCommentsByMovieID } from "./services/commentService"
+import { Types } from "mongoose"
 
 const routes = Router()
 
@@ -64,6 +65,11 @@ routes.post("/comments", async (req, res) => {
     return
   }
 
+  if (!Types.ObjectId.isValid(movieID)) {
+    res.status(500).json({ errorMessage: "movieID is not valid MongoDB ID" })
+    return
+  }
+
   if (!(await isMovieExisting(movieID))) {
     res.status(400).json({ errorMessage: "Movie with given ID does not exist" })
     return
@@ -84,7 +90,7 @@ routes.post("/comments", async (req, res) => {
  */
 routes.get("/comments", async (req, res, next) => {
   const movieID = req.query.movieID
-  let comments = await getComments(movieID)
+  let comments = await getCommentsByMovieID(movieID)
 
   res.status(200).json(comments)
 })

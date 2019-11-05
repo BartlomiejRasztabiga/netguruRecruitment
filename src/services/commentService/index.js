@@ -1,6 +1,6 @@
 import Comment from "../../api/comment"
 
-export const getComments = async movieID => {
+export const getCommentsByMovieID = async movieID => {
   if (movieID) {
     return Comment.find({ Movie: movieID })
   }
